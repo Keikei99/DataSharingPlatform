@@ -75,7 +75,7 @@
         <!-- 按钮 -->
         <el-form-item class="btns">
           <el-button type="primary" @click="login">登录</el-button>
-          <el-button type="primary">注册</el-button>
+          <el-button type="primary" @click="register">注册</el-button>
           <el-button type="info" @click="resetLoginForm">重置</el-button>
           <!-- @click=”“绑定点击事件 -->
         </el-form-item>
@@ -137,6 +137,12 @@ export default {
       //发起登录请求
       //this.$http.post("login", this.loginForm);
       //});
+    },
+    register() {
+      //console.log("登录成功");
+      //this.$message.success("登陆成功！");
+      //通过编程式导航挑战到后台主页，路由地址是/home
+      this.$router.push("/register");
     },
   },
 };

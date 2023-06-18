@@ -16,27 +16,12 @@
         <h2>API查询</h2>
         <!-- 搜索区域 -->
         <div class="input-box" :model="searchForm">
-          <input
-            type="search"
-            placeholder="Search Data..."
-            v-model="searchForm"
-          />
-          <svg
-            t="1685062339779"
-            class="search-icon"
-            viewBox="0 0 1024 1024"
-            version="1.1"
-            xmlns="http://www.w3.org/2000/svg"
-            p-id="2431"
-            width="200"
-            height="200"
-            @click="searchClick"
-          >
+          <input type="search" placeholder="Search Data..." v-model="searchForm" />
+          <svg t="1685062339779" class="search-icon" viewBox="0 0 1024 1024" version="1.1"
+            xmlns="http://www.w3.org/2000/svg" p-id="2431" width="200" height="200" @click="searchClick">
             <path
               d="M932.140361 933.699368c-32.619932 32.832779-85.518722 32.832779-118.160143 0L666.508491 785.285177c-60.631916 39.089273-132.315538 62.448284-209.680557 62.448284-215.337393 0-389.92571-175.666882-389.92571-392.398018C66.902224 238.617609 241.490541 62.936401 456.827935 62.936401c215.362976 0 389.926734 175.681208 389.926734 392.399041 0 77.862345-23.203468 149.993153-62.08194 211.024158l147.46661 148.413168C964.785875 847.630107 964.785875 900.845099 932.140361 933.699368zM456.827935 175.049828c-153.809061 0-278.522458 125.491109-278.522458 280.285614 0 154.805762 124.713396 280.284591 278.522458 280.284591 153.834644 0 278.521434-125.478829 278.521434-280.284591C735.350392 300.540937 610.662579 175.049828 456.827935 175.049828z"
-              fill="#2c2c2c"
-              p-id="2432"
-            ></path>
+              fill="#2c2c2c" p-id="2432"></path>
           </svg>
         </div>
       </section>
@@ -45,34 +30,26 @@
         <table>
           <thead>
             <tr class="head-tr">
-              <th>API-NAME</th>
-              <th>DATASOURCE-URL</th>
-              <th>DATA-ROUTE</th>
-              <th>ORACLECONTRACT_ADD</th>
-              <th>JOBID</th>
+              <th>API名称</th>
+              <th>数据源地址</th>
+              <th>预言机地址</th>
+              <th>预言机JobId</th>
               <!-- <th style="text-align: center">TEST</th> -->
             </tr>
           </thead>
           <tbody>
-            <tr
-              v-for="(item, index) in filteredAPI"
-              :key="index"
-              class="body-tr"
-            >
-              <td>
-                {{ item.api_Name }}
+            <tr v-for="(item, index) in filteredAPI" :key="index" class="body-tr">
+              <td @click="check(item)">
+                {{ item.api_Name|ellipsis }}
               </td>
-              <td>
-                {{ item.dataSource_Url }}
+              <td @click="check(item)" :show-overflow-tooltip=true>
+                {{ item.dataSource_Url|ellipsis }}
               </td>
-              <td>
-                {{ item.data_Route }}
+              <td @click="check(item)">
+                {{ item.oracleContract_add|ellipsis }}
               </td>
-              <td>
-                {{ item.oracleContract_add }}
-              </td>
-              <td>
-                {{ item.JobId }}
+              <td @click="check(item)">
+                {{ item.JobId|ellipsis }}
               </td>
               <!-- <td>
                 <p class="test-btn" @click="handleClick">TEST</p>
@@ -126,11 +103,25 @@ export default {
   data() {
     return {
       searchForm: "",
-      tableData: []
+      tableData: [],
+      // api_Name: "",
+      // dataSource_Url: "",
+      // data_Route: "",
+      // oracleContract_add: "",
+      // JobId: "",
     };
   },
   created() {
     this.initTable();
+  },
+  filters: {
+    ellipsis(value) {
+      if (!value) return ''
+      if (value.length > 18) {
+        return value.slice(0, 18) + '...'
+      }
+      return value
+    }
   },
   methods: {
     initTable() {
@@ -142,6 +133,19 @@ export default {
     searchClick() {
       console.log("搜索成功");
       this.$message.success("查询成功！");
+    },
+    check(item) {
+      console.log(item);
+      this.$router.push({
+        path: "/check",
+        query: {
+          api_Name: item.api_Name,
+          dataSource_Url: item.dataSource_Url,
+          data_Route: item.data_Route,
+          oracleContract_add: item.oracleContract_add,
+          JobId: item.JobId,
+        },
+      });
     },
   },
   //过滤器实现搜索功能
@@ -161,6 +165,7 @@ h2 {
   margin: 10px;
   text-align: center;
 }
+
 .api-table {
   width: 75%;
   height: 60%;
@@ -172,6 +177,7 @@ h2 {
   border-radius: 16px;
   overflow: hidden;
 }
+
 .table-header {
   width: 100%;
   height: 10%;
@@ -181,6 +187,7 @@ h2 {
   justify-content: space-between;
   align-items: center;
 }
+
 .input-box {
   width: 35%;
   height: 35px;
@@ -193,6 +200,7 @@ h2 {
   justify-content: center;
   align-items: center;
   transition: 0.2s;
+
   svg {
     position: relative;
     width: 20px;
@@ -201,9 +209,11 @@ h2 {
     cursor: pointer;
     right: -5%;
   }
+
   svg:hover {
     transform: scale(1.2);
   }
+
   input {
     position: relative;
     width: 90%;
@@ -215,11 +225,13 @@ h2 {
     outline: none;
   }
 }
+
 .input-box:hover {
   width: 45%;
   background-color: #fff8;
   box-shadow: 0 5px 40px #0002;
 }
+
 .table-shell {
   width: 95%;
   height: 90%;
@@ -227,15 +239,18 @@ h2 {
   margin: 20px auto;
   border-radius: 10px;
   overflow: auto;
+
   thead {
     display: block;
   }
+
   tbody {
     display: block;
     overflow-x: hidden;
     overflow-y: auto;
     height: 500px;
   }
+
   thead,
   tbody tr {
     display: table;
@@ -243,13 +258,16 @@ h2 {
     table-layout: fixed;
     word-break: break-all;
   }
+
   tbody::-webkit-scrollbar {
     width: 0px;
     height: 10px;
   }
+
   table {
     width: 100%;
   }
+
   table,
   th,
   td {
@@ -269,13 +287,16 @@ h2 {
     cursor: pointer;
   }
 }
+
 // 偶数行背景色
 .body-tr:nth-child(even) {
   background-color: #0000000b;
 }
+
 .body-tr:hover {
   background-color: #fff6 !important;
 }
+
 .test-btn {
   position: relative;
   width: 50%;
@@ -288,6 +309,7 @@ h2 {
   transition: 0.3s;
   cursor: pointer;
 }
+
 .test-btn:hover {
   transform: translate(-50%) scale(1.1);
   text-rendering: optimizeLegibility;

@@ -1,9 +1,8 @@
 <!-- 
   TODO: 点击创建按钮生成合约代码，出现在API创建表格底下
  -->
-
 <template>
-  <div>
+  <div id="maindiv">
     <el-breadcrumb separator-class="el-icon-arrow-right">
       <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
       <el-breadcrumb-item>API创建</el-breadcrumb-item>
@@ -14,32 +13,26 @@
       </section>
       <section class="table-shell">
         <div class="name-box">
-          <p style="background-color: #0000000b">API-NAME:</p>
-          <p>DATASOURCE-URL:</p>
-          <p style="background-color: #0000000b">DATA-ROUTE:</p>
-          <p>ORACLECONTRACT_ADD:</p>
-          <p style="background-color: #0000000b">JOBID:</p>
+          <p style="background-color: #0000000b">API名称</p>
+          <p>数据源地址</p>
+          <p style="background-color: #0000000b">预言机地址</p>
+          <p>预言机JOBID</p>
         </div>
         <div class="input-box">
           <input type="text" v-model="api_Name" class="input1" />
-          <input
-            type="text"
-            v-model="dataSource_Url"
-            class="input2"
-            style="background-color: #0000000b"
-          />
-          <input type="text" v-model="data_Route" class="input3" />
-          <input
-            type="text"
-            v-model="oracleContract_add"
-            class="input4"
-            style="background-color: #0000000b"
-          />
-          <input type="text" v-model="JobId" class="input3" />
+          <input type="text" v-model="dataSource_Url" class="input2" style="background-color: #0000000b" />
+          <input type="text" v-model="oracleContract_add" class="input4" />
+          <input type="text" v-model="JobId" class="input3" style="background-color: #0000000b" />
         </div>
         <button @click="addAPI" class="input-btn">创建</button>
+        <button @click="createContract" class="input-btn">生成合约</button>
       </section>
     </main>
+    <section class="table-header">
+      <h2>Solidity合约生成</h2>
+    </section>
+    <prism-editor id="codeEditor" class="my-editor height-300" v-model="code" :highlight="highlighter"
+      :line-numbers="lineNumbers"></prism-editor>
   </div>
 </template>
 
@@ -85,10 +78,25 @@ export default {
 </script> -->
 
 <script>
+import { PrismEditor } from "vue-prism-editor";
+import "vue-prism-editor/dist/prismeditor.min.css"; // import the styles somewhere
+
+// import highlighting library (you can use any library you want just return html string)
+import { highlight, languages } from "prismjs/components/prism-core";
+import "prismjs/components/prism-clike";
+import "prismjs/components/prism-javascript";
+import "prismjs/themes/prism-tomorrow.css"; // import syntax highlighting styles
 import axios from "axios";
+import clipboard from "clipboard";
+import SolidityCodeTemplate from "./SolidityCodeTemplate";
 export default {
+  components: {
+    PrismEditor
+  },
   data() {
     return {
+      code: 'console.log("Hello World")',
+      lineNumbers: true, // true为编辑模式， false只展示不可编辑
       api_Name: "",
       dataSource_Url: "",
       data_Route: "",
@@ -96,7 +104,7 @@ export default {
       JobId: "",
     };
   },
-  created() {},
+  created() { },
 
   methods: {
     addAPI() {
@@ -124,11 +132,27 @@ export default {
       console.log("创建成功");
       this.$message.success("创建成功！");
     },
+    highlighter(code) {
+      return highlight(code, languages.js); //returns html
+    },
+    createContract() {
+      this.$message.success("生成合约");
+      const api = {
+        api_Name: this.api_Name,
+        dataSource_Url: this.dataSource_Url,
+        data_Route: this.data_Route,
+        oracleContract_add: this.oracleContract_add,
+        JobId: this.JobId,
+      };
+      this.code = SolidityCodeTemplate.solidityCodeTemplate;
+    },
   },
+  
 };
 </script>
 
 <style lang="less" scoped>
+
 .create-api-table {
   width: 75%;
   height: 10%;
@@ -139,12 +163,14 @@ export default {
   transform: translate(-50%); //在移动自身宽度的50%
   border-radius: 16px;
   overflow: hidden;
+
   h2 {
     font-size: 30px;
     margin: 10px;
     text-align: center;
   }
 }
+
 .table-header {
   width: 100%;
   height: 10%;
@@ -154,19 +180,22 @@ export default {
   justify-content: space-between;
   align-items: center;
 }
+
 .table-shell {
   width: 95%;
   height: 90%;
   background-color: #fffb;
   margin: 20px auto;
   border-radius: 10px;
-  overflow: hidden;
+  // overflow: hidden;
+
   button {
     position: relative;
-    left: 50%;
+    left: 45%;
     transform: translate(-50%);
     border-radius: 40px;
     background-color: #409EFF;
+    color: white;
     transition: 0.3s;
     cursor: pointer;
     width: 80px;
@@ -174,15 +203,19 @@ export default {
     border: none;
     margin-top: 10px;
     margin-bottom: 10px;
+    margin-left: 10px;
   }
+
   button:hover {
     background-color: black;
     color: #ffe15d;
   }
 }
+
 .name-box {
   float: left;
   width: 50%;
+
   p {
     height: 50px;
     margin: 0;
@@ -191,17 +224,20 @@ export default {
     align-items: center;
     font-weight: bold;
   }
+
   p:hover {
     background-color: #fff6 !important;
   }
 }
+
 .input-box {
   position: relative;
   width: 50%;
   float: left;
+
   input {
     width: 100%;
-    padding: 0;
+    padding-left: 10px;
     height: 50px;
     display: flex;
     justify-content: flex-start;
@@ -209,8 +245,29 @@ export default {
     outline: none;
     background-color: transparent;
   }
+
   input:hover {
     background-color: #fff6 !important;
   }
+}
+
+.my-editor {
+  background: #2d2d2d;
+  color: #ccc;
+  font-family: Fira code, Fira Mono, Consolas, Menlo, Courier, monospace;
+  font-size: 14px;
+  line-height: 1.5;
+  padding: 5px;
+  margin-top: 10px;
+}
+
+/* optional */
+.prism-editor__textarea:focus {
+  outline: none;
+}
+
+/* not required: */
+.height-300 {
+  height: 1000px;
 }
 </style>

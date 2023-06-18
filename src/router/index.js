@@ -2,11 +2,11 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import Login from "../components/Login.vue";
 import Home from "../components/Home.vue";
-import Welcome from "../components/Welcome.vue";
 import Search from "../components/function/Search.vue";
 import Create from "../components/function/Create.vue";
-import Document from "../components/function/Document.vue";
 import ChainlinkOp from "../components/function/ChainlinkOp.vue";
+import Register from "../components/Register.vue";
+import Check from "../components/function/Check.vue";
 
 Vue.use(VueRouter);
 
@@ -17,15 +17,19 @@ const routes = [
     component: Login,
   },
   {
+    path: "/register",
+    component: Register,
+  },
+  {
     path: "/home",
     component: Home,
-    redirect: "/welcome",
+    redirect: "/search",
     children: [
-      { path: "/welcome", component: Welcome },
+      // { path: "/welcome", component: Welcome },
       { path: "/search", component: Search },
       { path: "/create", component: Create },
-      { path: "/document", component: Document },
       { path: "/chainlinkop", component: ChainlinkOp },
+      { path: "/check", component: Check },
     ],
   },
   {

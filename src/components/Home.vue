@@ -18,7 +18,7 @@
         </div>
         <div class="user-menu">
           <ul>
-            <li>
+            <!-- <li>
               <svg
                 t="1685031459116"
                 class="icon"
@@ -57,7 +57,7 @@
                 ></path>
               </svg>
               <a href="#">关于我们</a>
-            </li>
+            </li> -->
             <li>
               <svg
                 t="1685038223718"
@@ -103,10 +103,10 @@
             <i class="el-icon-document-add"></i>
             <span slot="title">API创建</span>
           </el-menu-item>
-          <el-menu-item index="/document">
+          <!-- <el-menu-item index="/document">
             <i class="el-icon-document"></i>
             <span slot="title">API开发文档</span>
-          </el-menu-item>
+          </el-menu-item> -->
           <el-menu-item index="/chainlinkop">
             <i class="el-icon-s-tools"></i>
             <span slot="title">Chainlink配置</span>
@@ -151,7 +151,7 @@ export default {
 <style lang="less" scoped>
 .home-container {
   height: 100%;
-  overflow: hidden;
+  overflow: auto;
 }
 .el-header {
   background-color: rgb(46, 46, 46);
@@ -165,7 +165,9 @@ export default {
     left: 70px;
     font-size: 20px;
     font-family: sans-serif;
-  }
+  };
+  table-layout: fixed;
+  position: sticky;
 }
 .el-aside {
   background-color: rgb(63, 63, 99);
@@ -238,6 +240,7 @@ a {
     height: 100%;
     object-fit: cover;
   }
+  margin-right: 12px;
 }
 
 .user-menu {
