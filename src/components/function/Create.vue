@@ -1,6 +1,3 @@
-<!-- 
-  TODO: 点击创建按钮生成合约代码，出现在API创建表格底下
- -->
 <template>
   <div id="maindiv">
     <el-breadcrumb separator-class="el-icon-arrow-right">
