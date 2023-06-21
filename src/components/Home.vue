@@ -8,8 +8,10 @@
       </div>
       <!-- 文字 -->
       <span>数据共享平台</span>
+      <div id="account">0x822eFe2799e8743885e0f927adaCA4E07AF3c8a2</div>
       <!-- 右侧盒子 -->
       <div class="user-box">
+        
         <div class="user-avater" @click="menuToggle">
           <img
             src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
@@ -149,6 +151,11 @@ export default {
 </script>
 
 <style lang="less" scoped>
+
+#account {
+  margin-right: 60px;
+}
+
 .home-container {
   height: 100%;
   overflow: auto;
